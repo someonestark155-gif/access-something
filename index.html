@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera & Microphone Access</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial;
+            margin-top: 40px;
+            background-color: #f4f4f4;
+        }
+
+        video {
+            width: 90%;
+            max-width: 400px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #startBtn {
+            background-color: green;
+            color: white;
+        }
+
+        #stopBtn {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Camera & Microphone Permission Demo</h2>
+<p>This page will request access to your camera and microphone.</p>
+
+<button id="startBtn">Start Camera & Mic</button>
+<button id="stopBtn">Stop</button>
+
+<br>
+<video id="video" autoplay playsinline></video>
+
+<script>
+let stream;
+
+const video = document.getElementById("video");
+const startBtn = document.getElementById("startBtn");
+const stopBtn = document.getElementById("stopBtn");
+
+startBtn.onclick = async function () {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: true
+        });
+
+        video.srcObject = stream;
+        alert("Access Granted!");
+    } catch (err) {
+        alert("Permission Denied or Error Occurred");
+        console.error(err);
+    }
+};
+
+stopBtn.onclick = function () {
+    if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+        alert("Camera & Mic Stopped");
+    }
+};
+</script>
+
+</body>
+</html>
